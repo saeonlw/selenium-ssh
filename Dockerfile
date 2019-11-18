@@ -89,6 +89,7 @@ RUN echo $(java -version)
 #========================================
 # container
 #========================================
-CMD cd $HOME && IP_ADDRESS=$(./getip.sh|grep "IP ADDRESS"|awk -F: '{print $2}') && echo $IP_ADDRESS
+ENV LOCAL_IP_ADDRESS
+CMD cd $HOME && LOCAL_IP_ADDRESS=$(./getip.sh|grep "IP ADDRESS"|awk -F: '{print $2}') && echo $LOCAL_IP_ADDRESS
 CMD java -jar $HOME/selenium-server-standalone.jar -role node -nodeConfig $CONFIG_JSON
 
