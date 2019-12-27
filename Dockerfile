@@ -14,20 +14,14 @@ ENV DEBIAN_FRONTEND=noninteractive \
     DEBCONF_NONINTERACTIVE_SEEN=true
 
 #========================================
-# get java/ssh/selenium
+# get java
 #========================================
 RUN apt-get -qqy update \
-    && apt-get -qqy install net-tools network-manager tzdata openssh-server \
-    && service ssh start
+    && apt-get -qqy install net-tools network-manager tzdata 
 
 RUN apt-get -qqy install openjdk-8-jre-headless \
     && sed -i 's/securerandom\.source=file:\/dev\/random/securerandom\.source=file:\/dev\/urandom/' \
     ./usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/java.security
-
-RUN wget --no-verbose \
-    https://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar \
-    -O $HOME/selenium-server-standalone.jar
-
 
 #========================================
 # Timezone settings. Possible alternative:
@@ -49,6 +43,15 @@ RUN useradd seluser \
   && echo 'seluser:secret' | chpasswd
 
 ENV HOME=/home/seluser
+#========================================
+# get selenium/ssh
+#========================================    
+RUN apt-get -qqy install openssh-server \
+    && service ssh start
+    
+RUN wget --no-verbose \
+    https://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar \
+    -O $HOME/selenium-server-standalone.jar
 
 
 #========================================
